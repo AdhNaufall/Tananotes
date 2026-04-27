@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import User from '@/models/User';
-import { AUTH_COOKIE_NAME, createAuthToken, shouldUseSecureAuthCookie, verifyPassword } from '@/lib/auth';
+import { AUTH_COOKIE_NAME, createAuthToken, hashPassword, shouldUseSecureAuthCookie, verifyPassword } from '@/lib/auth';
 
 export async function POST(request: Request) {
   try {
@@ -19,9 +19,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
     }
 
-    const passwordValid = await verifyPassword(String(password), user.passwordHash);
-    if (!passwordValid) {
+    const candidatePassword = String(password);
+    const passwordValid = await verifyPassword(candidatePassword, user.passwordHash);
+    const isLegacyPlaintextPassword = user.passwordHash === candidatePassword;
+
+    if (!passwordValid && !isLegacyPlaintextPassword) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
+    }
+
+    if (isLegacyPlaintextPassword) {
+      user.passwordHash = await hashPassword(candidatePassword);
+      await user.save();
     }
 
     const token = await createAuthToken({
