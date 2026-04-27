@@ -5,10 +5,12 @@ type MongooseCache = {
   promise: Promise<typeof mongoose> | null;
 };
 
-const MONGODB_URI = process.env.MONGODB_URI || '';
-
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+function getMongoUri() {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error('Please define the MONGODB_URI environment variable.');
+  }
+  return uri;
 }
 
 const globalWithMongoose = globalThis as typeof globalThis & {
@@ -27,11 +29,12 @@ export const connectDB = async () => {
   }
 
   if (!cached.promise) {
+    const mongoUri = getMongoUri();
     const opts = {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+    cached.promise = mongoose.connect(mongoUri, opts).then((mongoose) => {
       return mongoose;
     });
   }
