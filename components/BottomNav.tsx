@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Calendar, Pencil, NotebookText, LogOut } from 'lucide-react';
+import { Pencil, NotebookText, LogOut } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 
 export default function BottomNav() {
@@ -25,32 +25,30 @@ export default function BottomNav() {
     };
 
     return (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-center lg:hidden">
-            <div className="bg-[var(--color-nav-bg)] rounded-full px-8 py-3 flex items-center gap-8 brutalist-border brutalist-shadow">
+        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex items-center justify-center lg:hidden">
+            <div className="bg-[var(--color-nav-bg)] rounded-full px-4 py-3 flex items-center gap-3 brutalist-border brutalist-shadow">
 
-                <Link href="/notes" className="text-white hover:opacity-80 transition-opacity">
+                <Link href="/notes" className="flex items-center gap-2 px-4 py-2 rounded-full text-white hover:bg-white/10 transition-colors">
                     <NotebookText className="w-6 h-6" strokeWidth={2.5} />
+                    <span className="text-sm font-extrabold leading-none">Notes</span>
                 </Link>
 
-                {/* Floating Create Button */}
                 <Link
                     href="/notes/new"
-                    className="bg-white rounded-full w-12 h-12 flex items-center justify-center absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 brutalist-border brutalist-shadow hover:scale-110 transition-transform"
+                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-white text-black brutalist-border brutalist-shadow hover:-translate-y-0.5 transition-transform"
                 >
-                    <Pencil className="w-5 h-5 text-black" strokeWidth={2.5} />
-                </Link>
-
-                <Link href="/schedule" className="text-white hover:opacity-80 transition-opacity">
-                    <Calendar className="w-6 h-6" strokeWidth={2.5} />
+                    <Pencil className="w-[18px] h-[18px] text-black" strokeWidth={2.5} />
+                    <span className="text-sm font-extrabold leading-none whitespace-nowrap">New Note</span>
                 </Link>
 
                 <button
                     onClick={handleLogout}
-                    className="text-white hover:opacity-80 transition-opacity"
+                    className="flex items-center gap-2 px-4 py-2 rounded-full text-white hover:bg-white/10 transition-colors"
                     title="Logout"
                     aria-label="Logout"
                 >
                     <LogOut className="w-6 h-6" strokeWidth={2.5} />
+                    <span className="text-sm font-extrabold leading-none">Logout</span>
                 </button>
             </div>
         </div>

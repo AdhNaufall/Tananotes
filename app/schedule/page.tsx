@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Plus, Calendar as CalendarIcon, Trash2 } from 'lucide-react';
-import BottomNav from '@/components/BottomNav';
 
 interface Schedule {
   _id: string;
@@ -216,8 +215,6 @@ export default function SchedulePage() {
           })}
         </div>
       )}
-      
-      <BottomNav />
     </main>
   );
 }
